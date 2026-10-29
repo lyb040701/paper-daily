@@ -3,126 +3,58 @@
     { "type": "arxiv", "name": "arXiv" }
   ],
   "conference_sources": {
-    "enabled": true,
-    "current_year": 2026,
-    "lookback_years": 2,
-    "venues": [
-      {
-        "id": "isca",
-        "name": "ISCA",
-        "group": "computer architecture",
-        "dblp_toc_patterns": ["db/conf/isca/isca{year}.bht"]
-      },
-      {
-        "id": "micro",
-        "name": "MICRO",
-        "group": "computer architecture",
-        "dblp_toc_patterns": ["db/conf/micro/micro{year}.bht"]
-      },
-      {
-        "id": "hpca",
-        "name": "HPCA",
-        "group": "computer architecture",
-        "dblp_toc_patterns": ["db/conf/hpca/hpca{year}.bht"]
-      },
-      {
-        "id": "asplos",
-        "name": "ASPLOS",
-        "group": "computer architecture",
-        "dblp_toc_patterns": [
-          "db/conf/asplos/asplos{year}-1.bht",
-          "db/conf/asplos/asplos{year}-2.bht",
-          "db/conf/asplos/asplos{year}-3.bht",
-          "db/conf/asplos/asplos{year}-4.bht"
-        ]
-      },
-      {
-        "id": "mlsys",
-        "name": "MLSys",
-        "group": "systems for machine learning",
-        "dblp_toc_patterns": ["db/conf/mlsys/mlsys{year}.bht"]
-      },
-      {
-        "id": "eurosys",
-        "name": "EuroSys",
-        "group": "systems",
-        "dblp_toc_patterns": ["db/conf/eurosys/eurosys{year}.bht"]
-      }
-    ]
+    "enabled": false,
+    "include_default_venues": false,
+    "venues": []
   },
   "topics": [
     {
-      "id": "llm_low_precision_quantization",
-      "name": "大模型低精度量化",
-      "description": "关注大语言模型低比特量化、混合精度、量化感知训练、后训练量化、权重量化、激活量化、KV cache 量化以及量化对推理性能和精度的影响。",
+      "id": "few_shot_nuclei_instance_segmentation",
+      "name": "少样本病理细胞核实例分割",
+      "description": "关注 H&E 病理图像中的少样本细胞核实例分割与分类，重点关注跨数据集快速适配、粘连细胞核分离、实例级预测以及低标注场景。",
       "keywords": [
-        "large language model quantization",
-        "LLM quantization",
-        "low-bit quantization",
-        "post-training quantization",
-        "weight-only quantization",
-        "activation quantization",
-        "mixed precision",
-        "FP8",
-        "INT4",
-        "INT8",
-        "KV cache quantization"
+        "few-shot nuclei instance segmentation",
+        "few-shot nuclear instance segmentation",
+        "nuclei instance segmentation pathology",
+        "nuclear instance segmentation histopathology",
+        "few-shot histopathology segmentation",
+        "cross-domain nuclei segmentation",
+        "nuclei segmentation and classification",
+        "annotation-efficient nuclei segmentation"
       ],
-      "arxiv_categories": ["cs.CL", "cs.LG", "cs.AI", "cs.DC"]
+      "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
     },
     {
-      "id": "tensor_compute_unit_architecture",
-      "name": "张量计算单元结构",
-      "description": "关注 GPU/NPU/TPU 张量计算单元、矩阵乘加阵列、数据流架构、片上存储层次、低精度张量核、AI 加速器微架构和算子映射。",
+      "id": "foundation_model_domain_adaptation_pathology",
+      "name": "病理基础模型与轻量跨域适配",
+      "description": "关注 SAM、视觉基础模型和病理基础模型在医学图像分割中的跨域适配，重点关注 LoRA、Adapter、Prompt Tuning、参数高效微调和少样本迁移。",
       "keywords": [
-        "tensor processing unit",
-        "tensor core",
-        "matrix multiply unit",
-        "systolic array",
-        "AI accelerator architecture",
-        "NPU architecture",
-        "GPU tensor core",
-        "low precision tensor compute",
-        "dataflow architecture",
-        "on-chip memory hierarchy"
+        "SAM domain adaptation medical segmentation",
+        "foundation model pathology segmentation",
+        "parameter-efficient fine-tuning segmentation",
+        "LoRA medical image segmentation",
+        "adapter tuning medical segmentation",
+        "prompt tuning medical segmentation",
+        "few-shot SAM medical segmentation",
+        "cross-domain foundation model segmentation"
       ],
-      "arxiv_categories": ["cs.AR", "cs.DC", "cs.LG", "cs.PF"]
+      "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
     },
     {
-      "id": "llm_inference_cluster_communication",
-      "name": "大模型推理集群通信优化",
-      "description": "关注分布式大模型推理、prefill/decode 分离、张量并行、流水并行、专家并行、跨节点通信、调度、负载均衡和 serving 系统吞吐延迟优化。",
+      "id": "semi_weak_supervised_nuclei_segmentation",
+      "name": "少标注与半弱监督细胞核分割",
+      "description": "关注少量标注结合大量无标注数据的细胞核分割，包括半监督、弱监督、自训练、伪标签、点提示、边界监督和提示学习。",
       "keywords": [
-        "LLM inference serving",
-        "distributed inference",
-        "inference cluster",
-        "tensor parallelism",
-        "pipeline parallelism",
-        "expert parallelism",
-        "all-reduce",
-        "collective communication",
-        "prefill decode disaggregation",
-        "serving scheduler"
+        "semi-supervised nuclei segmentation",
+        "weakly supervised nuclei segmentation",
+        "point-supervised nuclei segmentation",
+        "pseudo-label nuclei segmentation",
+        "self-training histopathology segmentation",
+        "prompt-based nuclei segmentation",
+        "annotation-efficient histopathology segmentation",
+        "unlabeled data nuclei segmentation"
       ],
-      "arxiv_categories": ["cs.DC", "cs.PF", "cs.CL", "cs.LG"]
-    },
-    {
-      "id": "kvcache_compression_storage_scheduling",
-      "name": "KV cache 压缩与存储调度",
-      "description": "关注大模型推理中的 KV cache 压缩、淘汰、分页、卸载、预取、层级存储、显存管理和长上下文推理效率优化。",
-      "keywords": [
-        "KV cache compression",
-        "KV cache eviction",
-        "KV cache scheduling",
-        "paged attention",
-        "attention cache",
-        "long context inference",
-        "memory offloading",
-        "GPU memory management",
-        "cache prefetching",
-        "LLM serving memory"
-      ],
-      "arxiv_categories": ["cs.CL", "cs.LG", "cs.DC", "cs.PF"]
+      "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
     }
   ]
 }
