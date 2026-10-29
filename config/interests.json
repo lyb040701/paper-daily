@@ -9,50 +9,50 @@
   },
   "topics": [
     {
-      "id": "few_shot_nuclei_instance_segmentation",
-      "name": "少样本病理细胞核实例分割",
-      "description": "关注 H&E 病理图像中的少样本细胞核实例分割与分类，重点关注跨数据集快速适配、粘连细胞核分离、实例级预测以及低标注场景。",
+      "id": "nuclei_segmentation",
+      "name": "细胞核与病理图像分割",
+      "description": "关注病理图像、细胞核和细胞实例分割，包括基础模型、实例分割、分割与分类等相关方法。",
       "keywords": [
-        "few-shot nuclei instance segmentation",
-        "few-shot nuclear instance segmentation",
-        "nuclei instance segmentation pathology",
-        "nuclear instance segmentation histopathology",
-        "few-shot histopathology segmentation",
-        "cross-domain nuclei segmentation",
-        "nuclei segmentation and classification",
-        "annotation-efficient nuclei segmentation"
+        "nuclei segmentation",
+        "nuclear segmentation",
+        "nuclei instance segmentation",
+        "cell segmentation",
+        "cell instance segmentation",
+        "histopathology segmentation",
+        "pathology segmentation",
+        "medical image segmentation"
       ],
       "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
     },
     {
-      "id": "foundation_model_domain_adaptation_pathology",
-      "name": "病理基础模型与轻量跨域适配",
-      "description": "关注 SAM、视觉基础模型和病理基础模型在医学图像分割中的跨域适配，重点关注 LoRA、Adapter、Prompt Tuning、参数高效微调和少样本迁移。",
+      "id": "few_shot_segmentation",
+      "name": "少样本与少标注分割",
+      "description": "关注少样本、少标注、弱监督和参数高效适配的图像分割方法，重点关注能够快速迁移到新任务和新数据集的方法。",
       "keywords": [
-        "SAM domain adaptation medical segmentation",
-        "foundation model pathology segmentation",
-        "parameter-efficient fine-tuning segmentation",
-        "LoRA medical image segmentation",
-        "adapter tuning medical segmentation",
-        "prompt tuning medical segmentation",
-        "few-shot SAM medical segmentation",
-        "cross-domain foundation model segmentation"
+        "few-shot segmentation",
+        "few shot segmentation",
+        "low-shot segmentation",
+        "low label segmentation",
+        "annotation-efficient segmentation",
+        "weakly supervised segmentation",
+        "semi-supervised segmentation",
+        "parameter-efficient segmentation"
       ],
       "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
     },
     {
-      "id": "semi_weak_supervised_nuclei_segmentation",
-      "name": "少标注与半弱监督细胞核分割",
-      "description": "关注少量标注结合大量无标注数据的细胞核分割，包括半监督、弱监督、自训练、伪标签、点提示、边界监督和提示学习。",
+      "id": "domain_adaptation_segmentation",
+      "name": "跨域迁移与分割适配",
+      "description": "关注图像分割中的跨域迁移、域适配、域泛化、测试时适配以及基础模型快速适配方法。",
       "keywords": [
-        "semi-supervised nuclei segmentation",
-        "weakly supervised nuclei segmentation",
-        "point-supervised nuclei segmentation",
-        "pseudo-label nuclei segmentation",
-        "self-training histopathology segmentation",
-        "prompt-based nuclei segmentation",
-        "annotation-efficient histopathology segmentation",
-        "unlabeled data nuclei segmentation"
+        "domain adaptation segmentation",
+        "domain generalization segmentation",
+        "cross-domain segmentation",
+        "transfer learning segmentation",
+        "test-time adaptation segmentation",
+        "SAM adaptation",
+        "prompt tuning segmentation",
+        "adapter tuning segmentation"
       ],
       "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
     }
