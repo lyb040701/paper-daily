@@ -1558,8 +1558,6 @@ def fallback_summary(paper: dict[str, Any], best_match: dict[str, Any]) -> dict[
             "problem": "DBLP 题录没有摘要，且未在外部论文索引中找到足够可靠的同题论文摘要。",
             "method": "请打开论文链接查看方法和系统设计细节。",
             "innovation": "仅凭标题无法可靠判断创新点，已避免占用模型翻译额度。",
-            "evidence": "题录信息来自会议索引，技术细节需要在原文中核验。",
-            "limitations": "DBLP 通常不提供摘要；如果 arXiv、Semantic Scholar、OpenAlex 或 Crossref 暂未收录摘要，自动摘要会缺失。",
             "why_relevant": best_match.get("reason", "与配置方向存在文本匹配。"),
         }
     if not has_meaningful_summary(paper):
@@ -1567,16 +1565,12 @@ def fallback_summary(paper: dict[str, Any], best_match: dict[str, Any]) -> dict[
             "problem": "来源没有提供足够摘要，当前不调用模型做标题猜测。",
             "method": "请打开论文链接查看方法细节。",
             "innovation": "标题信息不足，无法可靠提取创新点。",
-            "evidence": "证据不足，需要阅读全文核验。",
-            "limitations": "缺少摘要会降低自动相关性和中文总结质量。",
             "why_relevant": best_match.get("reason", "与配置方向存在文本匹配。"),
         }
     return {
         "problem": "未配置模型 API，当前仅基于标题、摘要和关键词生成基础摘要。",
         "method": first_sentence[:300] if first_sentence else "请打开论文链接查看方法细节。",
         "innovation": "需要接入模型 API 后自动抽取更精确的中文创新点。",
-        "evidence": "来源摘要可在论文原文中核验。",
-        "limitations": "基础模式不会阅读全文，也不会进行深度技术对比。",
         "why_relevant": best_match.get("reason", "与配置方向存在文本匹配。"),
     }
 
@@ -1629,8 +1623,8 @@ def build_llm_prompt(topic: Topic, paper: dict[str, Any], base_match: dict[str, 
     return f"""
 请根据论文标题、摘要、分类和我的研究方向，输出精确中文分析。目标不是逐句翻译，而是综合整篇摘要快速判断这篇论文是否值得阅读。
 要求：
-1. 先识别论文真正解决的问题、核心机制、实验或系统证据，再翻译成自然中文。
-2. 不要夸大摘要中没有的信息；如果证据不足，请明确说明。
+1. 只提炼论文真正解决的问题和核心机制，避免展开背景和实验细节。
+2. 不要夸大摘要中没有的信息，表达尽量简洁。
 3. 相关性判断要严格，说明它具体匹配哪些关键词、场景或系统瓶颈。
 4. 如果论文只是泛泛相关，请把 match_level 降为 medium 或 low，并在 why_relevant 里说明需要人工复核。
 
@@ -1652,12 +1646,10 @@ arXiv 分类：{", ".join(paper.get("categories", []))}
 
 请输出 JSON，字段必须为：
 {{
-  "problem": "论文要解决的问题，中文，1-2句，避免空泛背景",
-  "method": "核心方法，中文，2-3句，包含关键技术组件或系统流程",
-  "innovation": "相对已有工作的具体创新点，中文，2-3点合并成一段",
-  "evidence": "摘要中可核验的实验、理论或系统证据；没有则写证据不足",
-  "limitations": "可能局限或需要阅读全文确认的点",
-  "why_relevant": "为什么匹配我的研究方向",
+  "problem": "论文要解决的问题，中文，1句",
+  "method": "核心方法，中文，1-2句，只保留关键组件",
+  "innovation": "最关键创新，中文，1-2点，简洁表达",
+  "why_relevant": "为什么匹配我的研究方向，中文，1句",
   "match_score_adjustment": 0.0,
   "match_level": "high|medium|low"
 }}
@@ -1679,8 +1671,6 @@ def summarize_with_llm(topic: Topic, paper: dict[str, Any], base_match: dict[str
         "problem": str(data.get("problem", "")),
         "method": str(data.get("method", "")),
         "innovation": str(data.get("innovation", "")),
-        "evidence": str(data.get("evidence", "")),
-        "limitations": str(data.get("limitations", "")),
         "why_relevant": str(data.get("why_relevant", "")),
     }
     adjustment = float(data.get("match_score_adjustment", 0.0) or 0.0)
