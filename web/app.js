@@ -1,4 +1,5 @@
 const THEME_STORAGE_KEY = "paper-daily-theme";
+const HIDDEN_PAPERS_STORAGE_KEY = "paper-daily-hidden-papers-v1";
 const THEMES = new Set(["dark", "light", "eye"]);
 
 const state = {
@@ -7,6 +8,8 @@ const state = {
     conference: null,
   },
   theme: "dark",
+  hiddenPaperIds: new Set(),
+  showHidden: false,
   filters: {
     query: "",
     topic: "all",
@@ -24,6 +27,8 @@ const nodes = {
   monthCount: document.querySelector("#monthCount"),
   topScore: document.querySelector("#topScore"),
   resultCount: document.querySelector("#resultCount"),
+  hiddenToggle: document.querySelector("#hiddenToggle"),
+  restoreAll: document.querySelector("#restoreAll"),
   viewTitle: document.querySelector("#viewTitle"),
   listTitle: document.querySelector("#listTitle"),
   scopeLabel: document.querySelector("#scopeLabel"),
@@ -169,9 +174,58 @@ function matchesView(paper) {
   return true;
 }
 
+
+function paperKey(paper) {
+  const identifier = paper.id || paper.paper_url || paper.pdf_url || paper.title;
+  return identifier ? String(identifier).trim() : "";
+}
+
+function loadHiddenPapers() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(HIDDEN_PAPERS_STORAGE_KEY) || "[]");
+    return new Set(Array.isArray(stored) ? stored.filter((id) => typeof id === "string" && id.length > 0) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveHiddenPapers() {
+  try {
+    localStorage.setItem(HIDDEN_PAPERS_STORAGE_KEY, JSON.stringify([...state.hiddenPaperIds]));
+  } catch {
+    // Private browsing modes may prevent persistent storage; the current session still works.
+  }
+}
+
+function isHidden(paper) {
+  const key = paperKey(paper);
+  return Boolean(key && state.hiddenPaperIds.has(key));
+}
+
+function hiddenPapers() {
+  const papersByKey = new Map();
+  for (const dataset of Object.values(state.datasets)) {
+    for (const paper of dataset?.papers || []) {
+      if (isHidden(paper)) papersByKey.set(paperKey(paper), paper);
+    }
+  }
+  return [...papersByKey.values()].sort((a, b) => String(collectionTime(b)).localeCompare(String(collectionTime(a))));
+}
+
+function setPaperHidden(paper, hidden) {
+  const key = paperKey(paper);
+  if (!key) return;
+  if (hidden) state.hiddenPaperIds.add(key);
+  else state.hiddenPaperIds.delete(key);
+  saveHiddenPapers();
+  updateStats();
+  render();
+}
+
 function filteredPapers() {
+  if (state.showHidden) return hiddenPapers().filter((paper) => textIncludes(paper, state.filters.query));
   return (activeData().papers || [])
-    .filter((paper) => matchesBaseFilters(paper) && matchesView(paper))
+    .filter((paper) => !isHidden(paper) && matchesBaseFilters(paper) && matchesView(paper))
     .sort((a, b) => scoreOf(b) - scoreOf(a) || String(b.published || "").localeCompare(String(a.published || "")));
 }
 
@@ -226,6 +280,20 @@ function renderPaper(paper) {
   downloadLink.setAttribute("download", safeFilename(paper));
   downloadLink.setAttribute("target", "_blank");
   downloadLink.setAttribute("rel", "noreferrer");
+
+  const deleteButton = node.querySelector(".delete-link");
+  if (state.showHidden) {
+    deleteButton.textContent = "恢复";
+    deleteButton.classList.add("restore-link");
+    deleteButton.title = "恢复这篇论文";
+    deleteButton.setAttribute("aria-label", `恢复论文：${paper.title || "未命名论文"}`);
+    deleteButton.addEventListener("click", () => setPaperHidden(paper, false));
+  } else {
+    deleteButton.textContent = "删除";
+    deleteButton.title = "仅在当前浏览器隐藏，可在“已删除”里恢复";
+    deleteButton.setAttribute("aria-label", `删除论文：${paper.title || "未命名论文"}`);
+    deleteButton.addEventListener("click", () => setPaperHidden(paper, true));
+  }
   return node;
 }
 
@@ -247,6 +315,13 @@ function viewLabels() {
 }
 
 function updateHeadings(papers) {
+  if (state.showHidden) {
+    nodes.viewTitle.textContent = "已删除论文";
+    nodes.listTitle.textContent = "已删除论文";
+    nodes.scopeLabel.textContent = "两个论文集合 · 仅在此浏览器隐藏 · 可逐篇恢复";
+    nodes.resultCount.textContent = `${papers.length} 篇`;
+    return;
+  }
   const labels = viewLabels()[state.filters.view];
   nodes.viewTitle.textContent = labels[0];
   nodes.listTitle.textContent = labels[0];
@@ -257,12 +332,16 @@ function updateHeadings(papers) {
 function render() {
   const papers = filteredPapers();
   updateHeadings(papers);
+  nodes.hiddenToggle.textContent = state.showHidden ? "返回论文列表" : `已删除（${state.hiddenPaperIds.size}）`;
+  nodes.hiddenToggle.classList.toggle("active", state.showHidden);
+  nodes.hiddenToggle.setAttribute("aria-pressed", String(state.showHidden));
+  nodes.restoreAll.hidden = !state.showHidden || state.hiddenPaperIds.size === 0;
   nodes.paperList.textContent = "";
 
   if (!papers.length) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
-    empty.textContent = "当前筛选条件下没有论文。";
+    empty.textContent = state.showHidden ? "当前没有可恢复的已删除论文。" : "当前筛选条件下没有论文。";
     nodes.paperList.appendChild(empty);
     return;
   }
@@ -298,7 +377,7 @@ function hydrateDateFilter() {
 }
 
 function updateStats() {
-  const papers = activeData().papers || [];
+  const papers = (activeData().papers || []).filter((paper) => !isHidden(paper));
   const date = selectedDate();
   const weekPapers = papers.filter((paper) => inRange(collectionTime(paper), startOfWeek(date), endOfWeek(date)));
   const monthPapers = papers.filter((paper) => inRange(collectionTime(paper), startOfMonth(date), endOfMonth(date)));
@@ -310,6 +389,16 @@ function updateStats() {
 }
 
 function bindEvents() {
+  nodes.hiddenToggle.addEventListener("click", () => {
+    state.showHidden = !state.showHidden;
+    render();
+  });
+  nodes.restoreAll.addEventListener("click", () => {
+    state.hiddenPaperIds.clear();
+    saveHiddenPapers();
+    updateStats();
+    render();
+  });
   for (const option of nodes.themeOptions) {
     option.addEventListener("click", () => {
       applyTheme(option.dataset.themeOption);
@@ -330,6 +419,7 @@ function bindEvents() {
   for (const tab of nodes.collectionTabs) {
     tab.addEventListener("click", () => {
       state.filters.collection = tab.dataset.collection;
+      state.showHidden = false;
       state.filters.view = state.filters.collection === "conference" ? "all" : "daily";
       state.filters.topic = "all";
       for (const item of nodes.collectionTabs) item.classList.toggle("active", item === tab);
@@ -381,6 +471,7 @@ function updateUpdatedAt(message = "") {
 
 async function main() {
   applyTheme(storedTheme());
+  state.hiddenPaperIds = loadHiddenPapers();
   bindEvents();
   try {
     state.datasets.daily = await loadData();

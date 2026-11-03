@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Paper Daily</title>
-    <link rel="stylesheet" href="./styles.css?v=20260530-split-sources" />
+    <link rel="stylesheet" href="./styles.css?v=20261103-paper-delete" />
   </head>
   <body>
     <header class="topbar">
@@ -104,8 +104,13 @@
             <h2 id="listTitle">当日论文</h2>
             <p id="scopeLabel">-</p>
           </div>
-          <span id="resultCount">0 篇</span>
+          <div class="content-tools">
+            <button class="manage-hidden" id="hiddenToggle" type="button" aria-pressed="false">已删除（0）</button>
+            <button class="manage-hidden restore-all" id="restoreAll" type="button" hidden>全部恢复</button>
+            <span id="resultCount">0 篇</span>
+          </div>
         </div>
+        <p class="delete-note">删除仅在当前浏览器隐藏论文，不会修改服务器数据；可在「已删除」中恢复。</p>
         <div id="paperList" class="paper-list"></div>
       </section>
     </main>
@@ -146,11 +151,12 @@
             <a class="paper-link abs-link" target="_blank" rel="noreferrer">原文</a>
             <a class="paper-link pdf-link" target="_blank" rel="noreferrer">PDF</a>
             <a class="paper-link download-link">下载 PDF</a>
+            <button class="paper-link delete-link" type="button">删除</button>
           </div>
         </footer>
       </article>
     </template>
 
-    <script src="./app.js?v=20260530-split-sources"></script>
+    <script src="./app.js?v=20261103-paper-delete"></script>
   </body>
 </html>

@@ -424,6 +424,44 @@ select:focus,
   margin: 6px 0 14px;
 }
 
+.content-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.manage-hidden {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--button-bg);
+  color: var(--text);
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.manage-hidden:hover,
+.manage-hidden.active {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.manage-hidden[hidden] {
+  display: none;
+}
+
+.delete-note {
+  margin: -6px 0 12px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
 .content-head h2 {
   margin: 0;
   font-size: 22px;
@@ -590,6 +628,32 @@ select:focus,
   color: var(--download-text);
 }
 
+.delete-link {
+  border-color: rgba(251, 113, 133, 0.45);
+  color: var(--coral);
+}
+
+.delete-link:hover {
+  border-color: var(--coral);
+  color: var(--coral);
+}
+
+.restore-link {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.restore-link:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.manage-hidden:focus-visible,
+.delete-link:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
 .empty-state {
   border: 1px dashed var(--line);
   border-radius: 8px;
@@ -648,6 +712,15 @@ select:focus,
   .metric,
   .overview-title {
     min-height: 112px;
+  }
+
+  .content-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .content-tools {
+    justify-content: flex-start;
   }
 
   .paper-footer {
