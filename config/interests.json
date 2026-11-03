@@ -1,6 +1,9 @@
 {
   "sources": [
-    { "type": "arxiv", "name": "arXiv" }
+    {
+      "type": "arxiv",
+      "name": "arXiv"
+    }
   ],
   "conference_sources": {
     "enabled": false,
@@ -22,7 +25,11 @@
         "pathology segmentation",
         "medical image segmentation"
       ],
-      "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
+      "arxiv_categories": [
+        "cs.CV",
+        "cs.LG",
+        "eess.IV"
+      ]
     },
     {
       "id": "few_shot_segmentation",
@@ -38,7 +45,11 @@
         "semi-supervised segmentation",
         "parameter-efficient segmentation"
       ],
-      "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
+      "arxiv_categories": [
+        "cs.CV",
+        "cs.LG",
+        "eess.IV"
+      ]
     },
     {
       "id": "domain_adaptation_segmentation",
@@ -54,7 +65,34 @@
         "prompt tuning segmentation",
         "adapter tuning segmentation"
       ],
-      "arxiv_categories": ["cs.CV", "cs.LG", "eess.IV"]
+      "arxiv_categories": [
+        "cs.CV",
+        "cs.LG",
+        "eess.IV"
+      ]
+    },
+    {
+      "id": "vision_language_nuclei_segmentation",
+      "name": "视觉语言多模态细胞核分割",
+      "description": "关注视觉语言模型与多模态学习在病理图像、细胞核及细胞实例分割中的应用，包括图文特征对齐、文本提示分割、CLIP、开放词汇分割，以及视觉语言基础模型的少样本与跨域适配。",
+      "keywords": [
+        "vision-language segmentation",
+        "vision-language cell segmentation",
+        "vision-language histopathology segmentation",
+        "multimodal nuclei segmentation",
+        "multimodal cell segmentation",
+        "text-guided nuclei segmentation",
+        "language-guided medical image segmentation",
+        "CLIP histopathology segmentation",
+        "open-vocabulary cell segmentation",
+        "multimodal pathology segmentation"
+      ],
+      "arxiv_categories": [
+        "cs.CV",
+        "cs.LG",
+        "eess.IV",
+        "cs.AI"
+      ]
     }
   ]
 }
